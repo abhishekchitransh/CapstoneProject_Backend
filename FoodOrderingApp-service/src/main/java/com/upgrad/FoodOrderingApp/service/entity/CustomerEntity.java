@@ -17,20 +17,20 @@ import java.io.Serializable;
 public class CustomerEntity implements Serializable {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "uuid")
+    @Column(name = "UUID")
     @Size(max = 200)
     private String uuid;
 
-    @Column(name = "firstName")
+    @Column(name = "FIRSTNAME")
     @NotNull
     @Size(max = 30)
     private String firstname;
 
-    @Column(name = "lastName")
+    @Column(name = "LASTNAME")
     @Size(max = 30)
     private String lastname;
 
@@ -39,12 +39,12 @@ public class CustomerEntity implements Serializable {
     @Size(max = 50)
     private String email;
 
-    @Column(name = "contact_Number")
+    @Column(name = "CONTACT_NUMBER")
     @NotNull
     @Size(max = 30)
     private String contact_Number;
 
-    @Column(name = "password")
+    @Column(name = "PASSWORD")
     @NotNull
     @Size(max = 255)
     @ToStringExclude
@@ -103,7 +103,7 @@ public class CustomerEntity implements Serializable {
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {

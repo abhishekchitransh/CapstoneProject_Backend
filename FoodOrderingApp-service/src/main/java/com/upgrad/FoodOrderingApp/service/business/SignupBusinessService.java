@@ -1,4 +1,4 @@
-package com.upgrad.FoodOrderingApp.service.businness;
+package com.upgrad.FoodOrderingApp.service.business;
 
 import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import com.upgrad.FoodOrderingApp.service.business.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +34,6 @@ public class SignupBusinessService {
         String[] encryptedText = passwordCryptographyProvider.encrypt(customerEntity.getPassword());
         customerEntity.setSalt(encryptedText[0]);
         customerEntity.setPassword(encryptedText[1]);
-
         return customerDao.createCustomer(customerEntity);
     }
 
@@ -41,14 +41,14 @@ public class SignupBusinessService {
         if(customerEntity.getFirstname() == null
                 && customerEntity.getEmail() == null
                 && customerEntity.getContact_Number() == null
-                && customerEntity.getPassword() == null
+                && customerEntity.getPassword()== null
                 ){
             throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
         }
         else {
             validateContactNo(customerEntity.getContact_Number());
             validateEmail(customerEntity.getEmail());
-            validatePassword(customerEntity.getPassword());
+        //    validatePassword(customerEntity.getPassword());
         }
         return customerEntity;
     }
