@@ -39,16 +39,16 @@ public class SignupBusinessService {
 
     public CustomerEntity validateCustomerData(CustomerEntity customerEntity) throws SignUpRestrictedException{
         if(customerEntity.getFirstname() == null
-                && customerEntity.getEmail() == null
-                && customerEntity.getContact_Number() == null
-                && customerEntity.getPassword()== null
+                || customerEntity.getEmail() == null
+                || customerEntity.getContact_Number() == null
+                || customerEntity.getPassword()== null
                 ){
             throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
         }
         else {
-            validateContactNo(customerEntity.getContact_Number());
             validateEmail(customerEntity.getEmail());
-        //    validatePassword(customerEntity.getPassword());
+            validateContactNo(customerEntity.getContact_Number());
+            validatePassword(customerEntity.getPassword());
         }
         return customerEntity;
     }

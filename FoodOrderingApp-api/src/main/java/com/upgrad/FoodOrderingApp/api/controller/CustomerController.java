@@ -51,6 +51,7 @@ public class CustomerController {
                     .status("customer registered successfully");
         return new ResponseEntity<SignupCustomerResponse>(signupCustomerResponse ,HttpStatus.CREATED);
     }
+
     @RequestMapping(method= RequestMethod.POST, path="/customer/login", consumes= MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LoginResponse> signIn(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
         byte[] decode = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
