@@ -130,7 +130,7 @@ public class RestaurantController {
         List<ItemList> itemLists = new ArrayList<>();
         for(CategoryEntity categoryEntity : categoryEntityList){
             for(ItemEntity itemEntity : categoryBusinessService.getAllCategoryItems(categoryEntity.getId())){
-                ItemList itemList = new ItemList().id(UUID.fromString(itemEntity.getUuid())).itemName(itemEntity.getItemName()).itemType(null).price(itemEntity.getPrice());
+                ItemList itemList = new ItemList().id(UUID.fromString(itemEntity.getUuid())).itemName(itemEntity.getItemName()).itemType(itemEntity.getType().equals("0")? ItemList.ItemTypeEnum.VEG : ItemList.ItemTypeEnum.NON_VEG).price(itemEntity.getPrice());
                 itemLists.add(itemList);
             }
             CategoryList categoryList = new CategoryList().id(UUID.fromString(categoryEntity.getUuid())).categoryName(categoryEntity.getCategory_name())
