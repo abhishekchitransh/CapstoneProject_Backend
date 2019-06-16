@@ -56,4 +56,12 @@ public class RestaurantDao {
         entityManager.merge(restaurantEntity);
         return restaurantEntity;
     }
+
+    public RestaurantEntity getRestaurantById(Integer restaurantId){
+        try{
+            return entityManager.createNamedQuery("getRestaurantById", RestaurantEntity.class).setParameter("restaurantId", restaurantId).getSingleResult();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
 }

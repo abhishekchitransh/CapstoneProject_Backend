@@ -1,6 +1,7 @@
 package com.upgrad.FoodOrderingApp.service.dao;
 
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
+import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import org.springframework.stereotype.Repository;
 
@@ -38,6 +39,28 @@ public class CategoryDao {
     public CategoryEntity getCategoryByUUID(String categoryUUID){
         try{
             return entityManager.createNamedQuery("getCategoryByUUID", CategoryEntity.class).setParameter("uuid", categoryUUID).getSingleResult();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public List<CategoryEntity> getAllCategoriesByRestId(Integer restuarantId){
+        try{
+            return entityManager.createNativeQuery("select c.* from restaurant_category rc inner join\n" +
+                    "category c on rc.category_id = c.id\n" +
+                    "inner join restaurant r on rc.restaurant_id = r.id\n" +
+                    "where r.id = ?",CategoryEntity.class).setParameter(1,restuarantId).getResultList();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public List<ItemEntity> getAllCategoryItems(Integer categoryId){
+        try{
+            return entityManager.createNativeQuery("select i.* from category_item ci inner join\n" +
+                    "item i on ci.item_id = i.id\n" +
+                    "inner join category c on ci.category_id = c.id\n" +
+                    "where c.id = ?",ItemEntity.class).setParameter(1,categoryId).getResultList();
         } catch (NoResultException nre){
             return null;
         }

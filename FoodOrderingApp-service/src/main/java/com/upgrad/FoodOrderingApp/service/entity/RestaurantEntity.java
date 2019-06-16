@@ -14,7 +14,8 @@ import java.util.UUID;
 @NamedQueries(
         {       @NamedQuery(name = "getAllRestaurants", query = "select res from RestaurantEntity res"),
                 @NamedQuery(name = "getAllRestaurantsByName", query = "select res from RestaurantEntity res where res.restaurantName LIKE :resNameKey"),
-                @NamedQuery(name = "getRestaurantByUUID", query = "select res from RestaurantEntity res where res.uuid = :restaurantUUID")
+                @NamedQuery(name = "getRestaurantByUUID", query = "select res from RestaurantEntity res where res.uuid = :restaurantUUID"),
+                @NamedQuery(name = "getRestaurantById", query = "select res from RestaurantEntity res where res.id = :restaurantId")
         }
 )
 
