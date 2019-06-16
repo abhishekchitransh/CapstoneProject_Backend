@@ -28,7 +28,17 @@ public class SignupBusinessService {
             throw new SignUpRestrictedException("SGR-001", "This contact number is already registered! Try other contact number.");
 
         }
+        if(customerEntity.getFirstname() == null
+                && customerEntity.getEmail() == null
+                && customerEntity.getContact_Number() == null
+                && customerEntity.getPassword()== null
+                ){
+            throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
+        }
         validateCustomerData(customerEntity);
+        //validateEmail(customerEntity.getEmail());
+        //validateContactNo(customerEntity.getContact_Number());
+        //validatePassword(customerEntity.getPassword());
 
         String password = customerEntity.getPassword();
         String[] encryptedText = passwordCryptographyProvider.encrypt(customerEntity.getPassword());

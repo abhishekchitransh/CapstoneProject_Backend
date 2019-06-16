@@ -28,6 +28,15 @@ public class CustomerDao {
         }
     }
 
+    public CustomerEntity getCustomerById(Integer id){
+        try{
+            return entityManager.createNamedQuery("getCustomerByID", CustomerEntity.class).setParameter("id", id)
+                    .getSingleResult();
+        }catch (NoResultException nre){
+            return null;
+        }
+    }
+
     public CustomerEntity checkContactNo (final String contactNo){
         try{
             return entityManager.createNamedQuery("getCustomerByContactNo", CustomerEntity.class).setParameter("contact_Number", contactNo).

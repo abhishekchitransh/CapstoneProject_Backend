@@ -1,13 +1,15 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "ADDRESS")
+@NamedQueries({
+        @NamedQuery(name = "addressByUUID", query = "select ae from AddressEntity ae where ae.uuid = :uuid")
+})
 public class AddressEntity implements Serializable {
 
     @Id
@@ -16,37 +18,32 @@ public class AddressEntity implements Serializable {
     private Integer id;
 
     @Column(name = "UUID")
-    private UUID uuid;
+    @Size(max = 200)
+    private String uuid;
 
     @Column(name = "FLAT_BUIL_NUMBER")
+    @Size(max = 255)
     private String flat_buil_number;
 
     @Column(name = "LOCALITY")
+    @Size(max = 255)
     private String locality;
 
     @Column(name = "CITY")
+    @Size(max = 30)
     private String city;
 
-    public List<RestaurantEntity> getRestaurants() {
-        return restaurants;
-    }
-
-    public void setRestaurants(List<RestaurantEntity> restaurants) {
-        this.restaurants = restaurants;
-    }
-
     @Column(name = "PINCODE")
+    @Size(max = 30)
     private String pincode;
 
-    @OneToMany(mappedBy = "addressEntity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<RestaurantEntity> restaurants = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "state_id")
+    @ManyToOne
+    @JoinColumn(name = "STATE_ID")
     private StateEntity stateEntity;
 
     @Column(name = "ACTIVE")
     private Integer active;
+
 
     public Integer getId() {
         return id;
@@ -56,11 +53,11 @@ public class AddressEntity implements Serializable {
         this.id = id;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
@@ -111,4 +108,5 @@ public class AddressEntity implements Serializable {
     public void setActive(Integer active) {
         this.active = active;
     }
+
 }
