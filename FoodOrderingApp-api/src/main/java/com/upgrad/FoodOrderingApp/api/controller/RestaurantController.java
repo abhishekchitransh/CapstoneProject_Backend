@@ -142,9 +142,9 @@ public class RestaurantController {
 
         RestaurantDetailsResponse restaurantDetailsResponse = new RestaurantDetailsResponse().id(UUID.fromString(restaurantByRestId.getUuid())).restaurantName(restaurantByRestId.getRestaurantName()).photoURL(restaurantByRestId.getPhotoURL())
             .customerRating(restaurantByRestId.getCustomeRating()).averagePrice(restaurantByRestId.getAvgPriceForTwo()).numberCustomersRated(restaurantByRestId.getNumbrOfCustomersRated())
-            .address(new RestaurantDetailsResponseAddress().id(restaurantByRestId.getAddressEntity().getUuid()).city(restaurantByRestId.getAddressEntity().getCity()).flatBuildingName(restaurantByRestId.getAddressEntity().getFlat_buil_number())
+            .address(new RestaurantDetailsResponseAddress().id(UUID.fromString(restaurantByRestId.getAddressEntity().getUuid())).city(restaurantByRestId.getAddressEntity().getCity()).flatBuildingName(restaurantByRestId.getAddressEntity().getFlat_buil_number())
                     .locality(restaurantByRestId.getAddressEntity().getLocality()).pincode(restaurantByRestId.getAddressEntity().getPincode()).state(
-                            new RestaurantDetailsResponseAddressState().id(restaurantByRestId.getAddressEntity().getStateEntity().getUuid()).stateName(restaurantByRestId.getAddressEntity().getStateEntity().getState_name())
+                            new RestaurantDetailsResponseAddressState().id(UUID.fromString(restaurantByRestId.getAddressEntity().getStateEntity().getUuid())).stateName(restaurantByRestId.getAddressEntity().getStateEntity().getState_name())
                     ))
             .categories(categoryLists);
 
@@ -153,10 +153,10 @@ public class RestaurantController {
     }
 
     @RequestMapping(method = RequestMethod.PUT,path = "/restaurant/{restaurant_id}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
-    public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@PathVariable("restaurant_id") String restaurantUUID, @RequestHeader("authorization") final String authorization, @RequestParam("customerRating") final BigDecimal customerRating) {
+    public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@PathVariable("restaurant_id") String restaurantUUID, @RequestHeader("authorization") final String authorization, @RequestParam("customerRating") final BigDecimal customerRating) throws AuthorizationFailedException, RestaurantNotFoundException {
 
         RestaurantEntity restaurantEntity = restaurantBusinessService.getRestaurantByUUID(restaurantUUID);
-        RestaurantEntity updatedRestaurantDetails = restaurantBusinessService.updateRestaurantDetails(restaurantEntity.getId(), customerRating, restaurantEntity);
+        RestaurantEntity updatedRestaurantDetails = restaurantBusinessService.updateRestaurantDetails(authorization, restaurantUUID, customerRating);
 
         final RestaurantUpdatedResponse restaurantUpdatedResponse = new RestaurantUpdatedResponse().id(UUID.fromString(updatedRestaurantDetails.getUuid())).status("RESTAURANT RATING UPDATED SUCCESSFULLY");
         return new ResponseEntity<RestaurantUpdatedResponse>(restaurantUpdatedResponse,HttpStatus.OK);
