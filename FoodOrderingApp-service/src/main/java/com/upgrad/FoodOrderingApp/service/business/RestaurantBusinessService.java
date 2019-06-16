@@ -1,7 +1,7 @@
 package com.upgrad.FoodOrderingApp.service.business;
 
 
-import com.upgrad.FoodOrderingApp.service.dao.RestaurantDAO;
+import com.upgrad.FoodOrderingApp.service.dao.RestaurantDao;
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantCategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
@@ -18,7 +18,7 @@ import java.util.List;
 public class RestaurantBusinessService {
 
     @Autowired
-    private RestaurantDAO restaurantDAO;
+    private RestaurantDao restaurantDAO;
 
     @Autowired
     private RestaurantCategoryBusinessService restaurantCategoryBusinessService;
