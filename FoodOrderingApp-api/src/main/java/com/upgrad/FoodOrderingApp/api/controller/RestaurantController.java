@@ -8,6 +8,7 @@ import com.upgrad.FoodOrderingApp.service.business.RestaurantCategoryBusinessSer
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantCategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
 import com.upgrad.FoodOrderingApp.service.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,11 +113,9 @@ public class RestaurantController {
     }
 
     @RequestMapping(method = RequestMethod.PUT,path = "/restaurant/{restaurant_id}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
-    public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@PathVariable("restaurant_id") String restaurantUUID, @RequestHeader("authorization") final String authorization, @RequestParam("customerRating") final BigDecimal customerRating) {
+    public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@PathVariable("restaurant_id") String restaurantUUID, @RequestHeader("authorization") final String authorization, @RequestParam("customerRating") final BigDecimal customerRating) throws AuthorizationFailedException,RestaurantNotFoundException {
 
-        RestaurantEntity restaurantEntity = restaurantBusinessService.getRestaurantByUUID(restaurantUUID);
-        RestaurantEntity updatedRestaurantDetails = restaurantBusinessService.updateRestaurantDetails(restaurantEntity.getId(), customerRating, restaurantEntity);
-
+        RestaurantEntity updatedRestaurantDetails = restaurantBusinessService.updateRestaurantDetails(authorization,restaurantUUID, customerRating);
         final RestaurantUpdatedResponse restaurantUpdatedResponse = new RestaurantUpdatedResponse().id(UUID.fromString(updatedRestaurantDetails.getUuid())).status("RESTAURANT RATING UPDATED SUCCESSFULLY");
         return new ResponseEntity<RestaurantUpdatedResponse>(restaurantUpdatedResponse,HttpStatus.OK);
 
