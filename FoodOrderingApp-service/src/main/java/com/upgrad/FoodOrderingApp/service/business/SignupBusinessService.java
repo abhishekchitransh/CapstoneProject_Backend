@@ -21,6 +21,8 @@ public class SignupBusinessService {
     @Autowired
     public CustomerDao customerDao;
 
+    private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$%]).{3,10})";
+
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity signup(CustomerEntity customerEntity) throws SignUpRestrictedException {
         CustomerEntity checkContactNum = customerDao.checkContactNo(customerEntity.getContact_Number());
@@ -79,14 +81,16 @@ public class SignupBusinessService {
     }
 
     private void validatePassword(String password) throws SignUpRestrictedException{
-        StringBuilder patternBuilder = new StringBuilder("((?=.*[a-z])");
-        patternBuilder.append("(?=.*[@#$%])");
-        patternBuilder.append("(?=.*[A-Z])");
-        patternBuilder.append("(?=.*d)");
-        patternBuilder.append(".{8})");
-        String pattern = patternBuilder.toString();
+        /*
+            StringBuilder patternBuilder = new StringBuilder("((?=.*[a-z])");
+            patternBuilder.append("(?=.*[@#$%])");
+            patternBuilder.append("(?=.*[A-Z])");
+            patternBuilder.append("(?=.*d)");
+            patternBuilder.append(".{8})");
 
-        Pattern p = Pattern.compile(pattern);
+            String pattern = patternBuilder.toString();
+        */
+        Pattern p = Pattern.compile(PASSWORD_PATTERN);
         Matcher m = p.matcher(password);
         if(m.matches() == false){
             throw new SignUpRestrictedException("SGR-004", "Weak password!");

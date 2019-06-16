@@ -98,6 +98,7 @@ public class AddressBusinessService {
         // Validate User
         CustomerAuthTokenEntity customerAuth = customerDao.checkAuthToken(authorization);
         AddressEntity addressEntity = addressDao.getAddressByUUID(address_uuid);
+        CustomerAddressEntity customerAddressEntity = customerAddressDao.getSingleAddress(addressEntity);
 
         if (customerAuth.equals(null)) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
@@ -114,9 +115,9 @@ public class AddressBusinessService {
             throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint.");
         }
 
-        CustomerAddressEntity customerAddressEntity = customerAddressDao.getSingleAddress(addressEntity);
 
-        if(customerAuth.getId().equals(customerAddressEntity.getCustomerEntity().getId())) {
+
+        if(customerAuth.getCustomer().getId().equals(customerAddressEntity.getCustomerEntity().getId())) {
             return addressDao.deleteAddress(address_uuid);
         }else {
             throw new AuthorizationFailedException("ATHR-004", "You are not authorized to view/update/delete any one else's address");

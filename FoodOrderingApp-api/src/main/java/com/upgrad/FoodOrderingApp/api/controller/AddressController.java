@@ -111,7 +111,7 @@ public class AddressController {
 
         String [] bearerToken = authorization.split("Bearer ");
 
-        final String deleteAddress = addressBusinessService.deleteAddress(addressID,authorization);
+        final String deleteAddress = addressBusinessService.deleteAddress(addressID,bearerToken[1]);
 
         DeleteAddressResponse deleteAddressResponse = new DeleteAddressResponse().id(UUID.fromString(deleteAddress)).status("Address Deleted");
 
