@@ -8,10 +8,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "category")
+
+@NamedQueries(
+        {       @NamedQuery(name = "getAllCategoriesBasedCatId", query = "select cat from CategoryEntity cat where cat.id = :categoryId"),
+                @NamedQuery(name = "getCategoryByUUID", query = "select cat from CategoryEntity cat where cat.uuid = :uuid")
+        }
+)
+
 public class CategoryEntity implements Serializable {
 
     @Id
@@ -21,7 +30,7 @@ public class CategoryEntity implements Serializable {
 
     @Column(name = "UUID")
     @Size(max = 200)
-    public UUID uuid;
+    public String uuid;
 
     @Column(name = "CATEGORY_NAME")
     @Size(max = 255)
@@ -35,11 +44,11 @@ public class CategoryEntity implements Serializable {
         this.id = id;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

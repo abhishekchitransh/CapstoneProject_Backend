@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/")
@@ -32,7 +33,7 @@ public class CategoryController {
         List<CategoryListResponse> categories = new ArrayList<>();
 
         for(CategoryEntity categoryEntity : CE){
-            CategoryListResponse categoryListResponse = new CategoryListResponse().id(categoryEntity.getUuid()).categoryName(categoryEntity.getCategory_name());
+            CategoryListResponse categoryListResponse = new CategoryListResponse().id(UUID.fromString(categoryEntity.getUuid())).categoryName(categoryEntity.getCategory_name());
             categories.add(categoryListResponse);
         }
 

@@ -4,20 +4,56 @@ import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
 public class RestaurantDao {
 
     @PersistenceContext
-    EntityManager entityManager;
-
+    private EntityManager entityManager;
 
     public List<RestaurantEntity> getAllRestaurants(){
-        Query query = entityManager.createQuery("select re from RestaurantEntity re order by re.restaurant_name");
-        return new ArrayList<RestaurantEntity>(query.getResultList());
+        try{
+            return entityManager.createNamedQuery("getAllRestaurants", RestaurantEntity.class).getResultList();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public List<RestaurantEntity> getAllRestaurantsByName(String resNameKey){
+        try{
+            return entityManager.createNamedQuery("getAllRestaurantsByName", RestaurantEntity.class).setParameter("resNameKey", resNameKey).getResultList();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public List<RestaurantEntity> getAllRestaurantsByCategory(Integer categoryId){
+        try{
+            return entityManager.createNativeQuery("select r.* from restaurant_category rc inner join\n" +
+                    "category c on rc.category_id = c.id\n" +
+                    "inner join restaurant r on rc.restaurant_id = r.id\n" +
+                    "where c.id = ?",RestaurantEntity.class).setParameter(1,categoryId).getResultList();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public RestaurantEntity getRestaurantByUUID(String restaurantUUID){
+        try{
+            return entityManager.createNamedQuery("getRestaurantByUUID", RestaurantEntity.class).setParameter("restaurantUUID", restaurantUUID).getSingleResult();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public RestaurantEntity updateRestaurantDetails(Integer restaurantId, BigDecimal customerRating, RestaurantEntity restaurantEntity){
+        entityManager.merge(restaurantEntity);
+        return restaurantEntity;
     }
 }

@@ -2,6 +2,8 @@ package com.upgrad.FoodOrderingApp.service.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -25,11 +27,22 @@ public class AddressEntity implements Serializable {
     @Column(name = "CITY")
     private String city;
 
+    public List<RestaurantEntity> getRestaurants() {
+        return restaurants;
+    }
+
+    public void setRestaurants(List<RestaurantEntity> restaurants) {
+        this.restaurants = restaurants;
+    }
+
     @Column(name = "PINCODE")
     private String pincode;
 
-    @OneToMany
-    @JoinColumn(name = "STATE_ID")
+    @OneToMany(mappedBy = "addressEntity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<RestaurantEntity> restaurants = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "state_id")
     private StateEntity stateEntity;
 
     @Column(name = "ACTIVE")

@@ -1,46 +1,77 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "restaurant")
-public class RestaurantEntity {
+
+@NamedQueries(
+        {       @NamedQuery(name = "getAllRestaurants", query = "select res from RestaurantEntity res"),
+                @NamedQuery(name = "getAllRestaurantsByName", query = "select res from RestaurantEntity res where res.restaurantName LIKE :resNameKey"),
+                @NamedQuery(name = "getRestaurantByUUID", query = "select res from RestaurantEntity res where res.uuid = :restaurantUUID")
+        }
+)
+
+public class RestaurantEntity implements Serializable {
+
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "UUID")
     @Size(max = 200)
-    private UUID uuid;
+    private String  uuid;
 
-    @Column(name = "RESTAURANT_NAME")
+    @Column(name = "restaurant_name")
     @Size(max = 50)
-    private String restaurant_name;
+    private String restaurantName;
 
-    @Column(name = "PHOTO_URL")
-    @Size(max = 255)
-    private String photo_url;
+    @Column(name = "photo_url")
+    @Size(max = 225)
+    private String photoURL;
 
-    @Column(name = "RESTAURANT_RATING")
-    private Float resturant_rating;
+    @Column(name = "customer_rating")
+    private BigDecimal customeRating;
 
-    @Column(name = "AVERAGE_PRICE_FOR_TWO")
-    private Integer average_price_for_two;
+    @Column(name = "average_price_for_two")
+    private Integer avgPriceForTwo;
 
-    @Column(name = "NUMBER_OF_CUSTOMERS_RATED")
-    private Integer num_customers_rated;
+//    public List<CategoryEntity> getCategories() {
+//        return categories;
+//    }
+//
+//    public void setCategories(List<CategoryEntity> categories) {
+//        this.categories = categories;
+//    }
 
-    @OneToOne
-    @JoinColumn(name = "ADDRESS_ID")
-    private AddressEntity address;
+    @Column(name = "number_of_customers_rated")
+    private Integer numbrOfCustomersRated;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "address_id")
+    private AddressEntity addressEntity;
+
+//    @ManyToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name="restaurant_category", joinColumns={@JoinColumn(referencedColumnName="ID")}
+//            , inverseJoinColumns={@JoinColumn(referencedColumnName="ID")})
+//    private List<CategoryEntity> categories = new ArrayList<>();
+
+//    @ManyToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name="restaurant_category", joinColumns={@JoinColumn(name = "RESTAURANT_ID", referencedColumnName="ID")}
+//            , inverseJoinColumns={@JoinColumn(name = "CATEGORY_ID", referencedColumnName="ID")})
+//    private List<CategoryEntity> categories = new ArrayList<>();
+
+//    @ManyToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name="restaurant_category", joinColumns={@JoinColumn(name="restaurant_id")}
+//            , inverseJoinColumns={@JoinColumn(name="category_id")})
+//    private List<CategoryEntity> categories = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -50,74 +81,59 @@ public class RestaurantEntity {
         this.id = id;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    public String getRestaurant_name() {
-        return restaurant_name;
+    public String getRestaurantName() {
+        return restaurantName;
     }
 
-    public void setRestaurant_name(String restaurant_name) {
-        this.restaurant_name = restaurant_name;
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 
-    public String getPhoto_url() {
-        return photo_url;
+    public String getPhotoURL() {
+        return photoURL;
     }
 
-    public void setPhoto_url(String photo_url) {
-        this.photo_url = photo_url;
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 
-    public Float getResturant_rating() {
-        return resturant_rating;
+    public BigDecimal getCustomeRating() {
+        return customeRating;
     }
 
-    public void setResturant_rating(Float resturant_rating) {
-        this.resturant_rating = resturant_rating;
+    public void setCustomeRating(BigDecimal customeRating) {
+        this.customeRating = customeRating;
     }
 
-    public Integer getAverage_price_for_two() {
-        return average_price_for_two;
+    public Integer getAvgPriceForTwo() {
+        return avgPriceForTwo;
     }
 
-    public void setAverage_price_for_two(Integer average_price_for_two) {
-        this.average_price_for_two = average_price_for_two;
+    public void setAvgPriceForTwo(Integer avgPriceForTwo) {
+        this.avgPriceForTwo = avgPriceForTwo;
     }
 
-    public Integer getNum_customers_rated() {
-        return num_customers_rated;
+    public Integer getNumbrOfCustomersRated() {
+        return numbrOfCustomersRated;
     }
 
-    public void setNum_customers_rated(Integer num_customers_rated) {
-        this.num_customers_rated = num_customers_rated;
+    public void setNumbrOfCustomersRated(Integer numbrOfCustomersRated) {
+        this.numbrOfCustomersRated = numbrOfCustomersRated;
     }
 
-    public AddressEntity getAddress() {
-        return address;
+    public AddressEntity getAddressEntity() {
+        return addressEntity;
     }
 
-    public void setAddress(AddressEntity address) {
-        this.address = address;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return new EqualsBuilder().append(this, obj).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(this).hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    public void setAddressEntity(AddressEntity addressEntity) {
+        this.addressEntity = addressEntity;
     }
 }
