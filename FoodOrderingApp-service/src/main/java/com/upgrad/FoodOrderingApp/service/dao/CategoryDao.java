@@ -1,6 +1,7 @@
 package com.upgrad.FoodOrderingApp.service.dao;
 
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CategoryItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import org.springframework.stereotype.Repository;
@@ -19,11 +20,27 @@ public class CategoryDao {
     @PersistenceContext
     EntityManager entityManager;
 
-    public List<CategoryEntity> getAllCategories(){
-        try{
-            Query query = entityManager.createQuery("select ce from CategoryEntity ce order by ce.category_name");
-            return new ArrayList<CategoryEntity>(query.getResultList());
-        }catch (NoResultException nre){
+    public List<CategoryEntity> getAllCategories() {
+
+        List<CategoryEntity> categories = entityManager.createNamedQuery("getCategory", CategoryEntity.class).getResultList();
+        return categories;
+    }
+
+    public CategoryItemEntity getCategoryData(String uuid) {
+        try {
+
+            CategoryItemEntity categoryItemEntity = entityManager.createNamedQuery("getCategoryData", CategoryItemEntity.class).setParameter("uuid",uuid).getSingleResult();
+            return categoryItemEntity;
+        } catch ( NoResultException nre) {
+            return null;
+        }
+    }
+    public List<CategoryItemEntity> getItems(String categoryId) {
+        try {
+
+            List<CategoryItemEntity> items = entityManager.createNamedQuery("getItems",CategoryItemEntity.class).setParameter("categoryId", categoryId).getResultList();
+            return items;
+        } catch ( NoResultException nre) {
             return null;
         }
     }

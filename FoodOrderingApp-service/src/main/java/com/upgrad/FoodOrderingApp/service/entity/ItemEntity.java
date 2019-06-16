@@ -5,11 +5,11 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "restaurant")
+@Table(name = "ITEM")
 public class ItemEntity implements Serializable {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -17,14 +17,14 @@ public class ItemEntity implements Serializable {
     @Size(max = 200)
     private String  uuid;
 
-    @Column(name = "item_name")
+    @Column(name = "ITEM_NAME")
     @Size(max = 30)
     private String itemName;
 
-    @Column(name = "price")
+    @Column(name = "PRICE")
     private Integer price;
 
-    @Column(name = "type")
+    @Column(name = "TYPE")
     @Size(max = 10)
     private String type;
 

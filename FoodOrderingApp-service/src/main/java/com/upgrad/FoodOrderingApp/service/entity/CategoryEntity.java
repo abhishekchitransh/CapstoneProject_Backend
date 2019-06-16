@@ -17,7 +17,9 @@ import java.util.UUID;
 
 @NamedQueries(
         {       @NamedQuery(name = "getAllCategoriesBasedCatId", query = "select cat from CategoryEntity cat where cat.id = :categoryId"),
-                @NamedQuery(name = "getCategoryByUUID", query = "select cat from CategoryEntity cat where cat.uuid = :uuid")
+                @NamedQuery(name = "getCategoryByUUID", query = "select cat from CategoryEntity cat where cat.uuid = :uuid"),
+                @NamedQuery(name = "getCategory", query = "select ce from CategoryEntity ce "),
+                @NamedQuery(name = "getCategoryData", query = "select ce from CategoryEntity ce where ce.uuid = :uuid")
         }
 )
 
