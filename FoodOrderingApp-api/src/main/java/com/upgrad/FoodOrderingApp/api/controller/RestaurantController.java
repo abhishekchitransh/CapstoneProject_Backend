@@ -48,9 +48,9 @@ public class RestaurantController {
             RestaurantList restaurantList = new RestaurantList().id(UUID.fromString(restaurantEntity.getUuid())).restaurantName(restaurantEntity.getRestaurantName()).photoURL(restaurantEntity.getPhotoURL())
                     .customerRating(restaurantEntity.getCustomeRating()).averagePrice(restaurantEntity.getAvgPriceForTwo()).numberCustomersRated(restaurantEntity.getNumbrOfCustomersRated())
                     .address(
-                        new RestaurantDetailsResponseAddress().id(restaurantEntity.getAddressEntity().getUuid()).city(restaurantEntity.getAddressEntity().getCity()).flatBuildingName(restaurantEntity.getAddressEntity().getFlat_buil_number())
+                        new RestaurantDetailsResponseAddress().id(UUID.fromString(restaurantEntity.getAddressEntity().getUuid())).city(restaurantEntity.getAddressEntity().getCity()).flatBuildingName(restaurantEntity.getAddressEntity().getFlat_buil_number())
                             .locality(restaurantEntity.getAddressEntity().getLocality()).pincode(restaurantEntity.getAddressEntity().getPincode())
-                            .state(new RestaurantDetailsResponseAddressState().id(restaurantEntity.getAddressEntity().getStateEntity().uuid).stateName(restaurantEntity.getAddressEntity().getStateEntity().getState_name()))
+                            .state(new RestaurantDetailsResponseAddressState().id(UUID.fromString(restaurantEntity.getAddressEntity().getStateEntity().uuid)).stateName(restaurantEntity.getAddressEntity().getStateEntity().getState_name()))
 
                     )
                     .categories(allCategoriesLinkedToRestaurant);
@@ -73,9 +73,9 @@ public class RestaurantController {
             RestaurantList restaurantList = new RestaurantList().id(UUID.fromString(restaurantEntity.getUuid())).restaurantName(restaurantEntity.getRestaurantName()).photoURL(restaurantEntity.getPhotoURL())
                     .customerRating(restaurantEntity.getCustomeRating()).averagePrice(restaurantEntity.getAvgPriceForTwo()).numberCustomersRated(restaurantEntity.getNumbrOfCustomersRated())
                     .address(
-                            new RestaurantDetailsResponseAddress().id(restaurantEntity.getAddressEntity().getUuid()).city(restaurantEntity.getAddressEntity().getCity()).flatBuildingName(restaurantEntity.getAddressEntity().getFlat_buil_number())
+                            new RestaurantDetailsResponseAddress().id(UUID.fromString(restaurantEntity.getAddressEntity().getUuid())).city(restaurantEntity.getAddressEntity().getCity()).flatBuildingName(restaurantEntity.getAddressEntity().getFlat_buil_number())
                                     .locality(restaurantEntity.getAddressEntity().getLocality()).pincode(restaurantEntity.getAddressEntity().getPincode())
-                                    .state(new RestaurantDetailsResponseAddressState().id(restaurantEntity.getAddressEntity().getStateEntity().uuid).stateName(restaurantEntity.getAddressEntity().getStateEntity().getState_name()))
+                                    .state(new RestaurantDetailsResponseAddressState().id(UUID.fromString(restaurantEntity.getAddressEntity().getStateEntity().uuid)).stateName(restaurantEntity.getAddressEntity().getStateEntity().getState_name()))
 
                     )
                     .categories(allCategoriesLinkedToRestaurant);
@@ -96,12 +96,18 @@ public class RestaurantController {
 
         for(RestaurantEntity restaurantEntity : allRestaurantsByCategory){
             String allCategoriesLinkedToRestaurant = restaurantBusinessService.getCategoriesLinkedToRestaurant(restaurantEntity.getId());
-            RestaurantList restaurantList = new RestaurantList().id(UUID.fromString(restaurantEntity.getUuid())).restaurantName(restaurantEntity.getRestaurantName()).photoURL(restaurantEntity.getPhotoURL())
-                    .customerRating(restaurantEntity.getCustomeRating()).averagePrice(restaurantEntity.getAvgPriceForTwo()).numberCustomersRated(restaurantEntity.getNumbrOfCustomersRated())
+            RestaurantList restaurantList = new RestaurantList()
+                    .id(UUID.fromString(restaurantEntity.getUuid()))
+                    .restaurantName(restaurantEntity.getRestaurantName())
+                    .photoURL(restaurantEntity.getPhotoURL())
+                    .customerRating(restaurantEntity.getCustomeRating())
+                    .averagePrice(restaurantEntity.getAvgPriceForTwo())
+                    .numberCustomersRated(restaurantEntity.getNumbrOfCustomersRated())
                     .address(
-                            new RestaurantDetailsResponseAddress().id(restaurantEntity.getAddressEntity().getUuid()).city(restaurantEntity.getAddressEntity().getCity()).flatBuildingName(restaurantEntity.getAddressEntity().getFlat_buil_number())
+                            new RestaurantDetailsResponseAddress().id(UUID.fromString(restaurantEntity.getAddressEntity().getUuid())).city(restaurantEntity.getAddressEntity().getCity()).flatBuildingName(restaurantEntity.getAddressEntity().getFlat_buil_number())
                                     .locality(restaurantEntity.getAddressEntity().getLocality()).pincode(restaurantEntity.getAddressEntity().getPincode())
-                                    .state(new RestaurantDetailsResponseAddressState().id(restaurantEntity.getAddressEntity().getStateEntity().uuid).stateName(restaurantEntity.getAddressEntity().getStateEntity().getState_name()))
+                                    .state(new RestaurantDetailsResponseAddressState().id(UUID.fromString(restaurantEntity.getAddressEntity().getStateEntity().uuid))
+                                            .stateName(restaurantEntity.getAddressEntity().getStateEntity().getState_name()))
 
                     )
                     .categories(allCategoriesLinkedToRestaurant);
@@ -147,9 +153,11 @@ public class RestaurantController {
     }
 
     @RequestMapping(method = RequestMethod.PUT,path = "/restaurant/{restaurant_id}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
-    public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@PathVariable("restaurant_id") String restaurantUUID, @RequestHeader("authorization") final String authorization, @RequestParam("customerRating") final BigDecimal customerRating) throws AuthorizationFailedException,RestaurantNotFoundException {
+    public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@PathVariable("restaurant_id") String restaurantUUID, @RequestHeader("authorization") final String authorization, @RequestParam("customerRating") final BigDecimal customerRating) {
 
-        RestaurantEntity updatedRestaurantDetails = restaurantBusinessService.updateRestaurantDetails(authorization,restaurantUUID, customerRating);
+        RestaurantEntity restaurantEntity = restaurantBusinessService.getRestaurantByUUID(restaurantUUID);
+        RestaurantEntity updatedRestaurantDetails = restaurantBusinessService.updateRestaurantDetails(restaurantEntity.getId(), customerRating, restaurantEntity);
+
         final RestaurantUpdatedResponse restaurantUpdatedResponse = new RestaurantUpdatedResponse().id(UUID.fromString(updatedRestaurantDetails.getUuid())).status("RESTAURANT RATING UPDATED SUCCESSFULLY");
         return new ResponseEntity<RestaurantUpdatedResponse>(restaurantUpdatedResponse,HttpStatus.OK);
 

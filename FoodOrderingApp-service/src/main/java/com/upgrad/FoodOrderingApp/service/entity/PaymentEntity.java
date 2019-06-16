@@ -1,45 +1,36 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
-@Table(name = "state")
-@NamedQueries({
-        @NamedQuery(name = "getStateByUUID", query = "select se from StateEntity se where se.uuid = :uuid")
-})
-public class StateEntity implements Serializable {
+@Table(name="PAYMENT")
+@NamedQueries(
+        {
+                @NamedQuery(name = "getPayment", query = "select pe from PaymentEntity pe ")
+        }
+)
+public class PaymentEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    private int id;
 
     @Column(name = "UUID")
     @Size(max = 200)
-    @NotNull
-    public String uuid;
+    private String uuid;
 
-    @Column(name = "STATE_NAME")
-    @Size(max = 30)
-    @NotNull
-    public String state_name;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "PAYMENT_NAME")
+    @Size(max = 255)
+    private String payment_name;
 
     public String getUuid() {
         return uuid;
@@ -49,12 +40,20 @@ public class StateEntity implements Serializable {
         this.uuid = uuid;
     }
 
-    public String getState_name() {
-        return state_name;
+    public String getPayment_name() {
+        return payment_name;
     }
 
-    public void setState_name(String state_name) {
-        this.state_name = state_name;
+    public void setPayment_name(String payment_name) {
+        this.payment_name = payment_name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -71,4 +70,5 @@ public class StateEntity implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
+
 }
